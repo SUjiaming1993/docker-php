@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: php
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: php
+    spec:
+      containers:
+      - name: php
+        image: registry.cn-zhangjiakou.aliyuncs.com/yangjun/php-fpm:7.2.13
+        ports:
+        - containerPort: 9000
+        volumeMounts:
+        - name: wwwroot
+          mountPath: /app/wwwroot/
+        - name: conf-ini
+          mountPath: /usr/local/etc/php/php.ini
+        - name: conf
+          mountPath: /usr/local/etc/php-fpm.d/www.conf
+      volumes:
+      - name: wwwroot
+        hostPath:
+          path: /mnt/wwwroot
+      - name: conf-ini
+        hostPath:
+          path: /conf/php.ini
+      - name: conf
+        hostPath:
+          path: /conf/php-fpm.conf
